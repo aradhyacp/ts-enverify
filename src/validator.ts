@@ -47,9 +47,9 @@ export function enverify<S extends EnverifySchema>(
             }
 
             case 'boolean': {
-                if(raw === true || raw === '1'){
+                if(raw === true || raw === '1' || raw === 'true'){
                     result[key]=true
-                }else if (raw === false || raw === '0'){
+                }else if (raw === false || raw === '0' || raw === 'false'){
                     result[key]=false
                 }else{
                     failures.push(`${key}: expected true/false/1/0, got "${raw}"`)
