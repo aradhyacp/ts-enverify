@@ -1,8 +1,16 @@
 {
   "name": "enverify",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Type-safe environment variable validation for Node.js. Zero dependencies.",
-  "author": "",
+  "author": "aradhyacp",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aradhyacp/enverify.git"
+  },
+  "homepage": "https://github.com/aradhyacp/enverify#readme",
+  "bugs": {
+    "url": "https://github.com/aradhyacp/enverify/issues"
+  },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -14,7 +22,9 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsup",
@@ -27,10 +37,21 @@
   "keywords": [
     "env",
     "environment",
+    "environment-variables",
+    "express",
     "validation",
+    "validator",
     "typescript",
+    "type-safe",
     "dotenv",
-    "type-safe"
+    "schema",
+    "runtime-validation",
+    "node",
+    "nodejs",
+    "config",
+    "configuration",
+    "startup",
+    "zero-dependencies"
   ],
   "license": "MIT",
   "devDependencies": {
