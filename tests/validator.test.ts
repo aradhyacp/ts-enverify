@@ -1,13 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import { enverify } from '../src/index'
-import { EnverifyError } from '../src/errors'
+import { typedenv } from '../src/index'
+import { TypedEnvError } from '../src/errors'
 
 // We always pass a custom `source` in tests
 // Never touch real process.env in tests — that's unpredictable
 
 describe('string fields', () => {
   it('passes when a required string is present', () => {
-    const env = enverify(
+    const env = typedenv(
       { DATABASE_URL: { type: 'string', required: true } },
       { source: { DATABASE_URL: 'postgres://localhost/db' } }
     )
@@ -16,15 +16,15 @@ describe('string fields', () => {
 
   it('throws when a required string is missing', () => {
     expect(() =>
-      enverify(
+      typedenv(
         { DATABASE_URL: { type: 'string', required: true } },
         { source: {} }
       )
-    ).toThrow(EnverifyError)
+    ).toThrow(TypedEnvError)
   })
 
   it('uses the default when value is absent', () => {
-    const env = enverify(
+    const env = typedenv(
       { HOST: { type: 'string', default: 'localhost' } },
       { source: {} }
     )
@@ -34,7 +34,7 @@ describe('string fields', () => {
 
 describe('number fields', () => {
   it('parses a valid number string', () => {
-    const env = enverify(
+    const env = typedenv(
       { PORT: { type: 'number', default: 3000 } },
       { source: { PORT: '8080' } }
     )
@@ -44,15 +44,15 @@ describe('number fields', () => {
 
   it('throws for a non-numeric value', () => {
     expect(() =>
-      enverify(
+      typedenv(
         { PORT: { type: 'number', required: true } },
         { source: { PORT: 'abc' } }
       )
-    ).toThrow(EnverifyError)
+    ).toThrow(TypedEnvError)
   })
 
   it('uses numeric default when absent', () => {
-    const env = enverify(
+    const env = typedenv(
       { PORT: { type: 'number', default: 3000 } },
       { source: {} }
     )
@@ -67,7 +67,7 @@ describe('boolean fields', () => {
     ['false', false],
     ['0', false],
   ])('parses "%s" as %s', (raw, expected) => {
-    const env = enverify(
+    const env = typedenv(
       { ENABLE_CACHE: { type: 'boolean', default: false } },
       { source: { ENABLE_CACHE: raw } }
     )
@@ -76,11 +76,11 @@ describe('boolean fields', () => {
 
   it('throws for an invalid boolean string', () => {
     expect(() =>
-      enverify(
+      typedenv(
         { ENABLE_CACHE: { type: 'boolean', required: true } },
         { source: { ENABLE_CACHE: 'yes' } }
       )
-    ).toThrow(EnverifyError)
+    ).toThrow(TypedEnvError)
   })
 })
 
@@ -94,21 +94,21 @@ describe('enum fields', () => {
   }
 
   it('passes with a valid enum value', () => {
-    const env = enverify(schema, { source: { NODE_ENV: 'production' } })
+    const env = typedenv(schema, { source: { NODE_ENV: 'production' } })
     expect(env.NODE_ENV).toBe('production')
   })
 
   it('throws for a value not in the enum', () => {
     expect(() =>
-      enverify(schema, { source: { NODE_ENV: 'prod' } })
-    ).toThrow(EnverifyError)
+      typedenv(schema, { source: { NODE_ENV: 'prod' } })
+    ).toThrow(TypedEnvError)
   })
 })
 
 describe('error collection', () => {
   it('collects ALL errors at once, not just the first', () => {
     try {
-      enverify(
+      typedenv(
         {
           DATABASE_URL: { type: 'string', required: true },
           PORT:         { type: 'number', required: true },
@@ -116,8 +116,8 @@ describe('error collection', () => {
         { source: {} }   // both missing
       )
     } catch (err) {
-      expect(err).toBeInstanceOf(EnverifyError)
-      const e = err as EnverifyError
+      expect(err).toBeInstanceOf(TypedEnvError)
+      const e = err as TypedEnvError
       expect(e.failures).toHaveLength(2)
       expect(e.failures[0]).toContain('DATABASE_URL')
       expect(e.failures[1]).toContain('PORT')
