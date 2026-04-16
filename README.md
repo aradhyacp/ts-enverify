@@ -1,12 +1,12 @@
-# typedenv
+# enverify
 
 **Type-safe environment variable validation for Node.js.**  
 Catch missing or malformed env vars at startup — before they silently break your app.
 
 Zero dependencies. Works with any framework. Infers TypeScript types automatically.
 
-[![npm version](https://img.shields.io/npm/v/typedenv.svg)](https://www.npmjs.com/package/typedenv)
-[![license](https://img.shields.io/npm/l/typedenv.svg)](./LICENSE)
+[![npm version](https://img.shields.io/npm/v/enverify.svg)](https://www.npmjs.com/package/enverify)
+[![license](https://img.shields.io/npm/l/enverify.svg)](./LICENSE)
 
 ---
 
@@ -26,7 +26,7 @@ app, not at startup where it's easy to catch.
 ## Install
 
 ```bash
-npm i typedenv
+npm i enverify
 ```
 
 ---
@@ -34,9 +34,9 @@ npm i typedenv
 ## Usage
 
 ```ts
-import { typedenv } from 'typedenv'
+import { enverify } from 'enverify'
 
-const env = typedenv({
+const env = enverify({
   DATABASE_URL: { type: 'string',  required: true },
   PORT:         { type: 'number',  default: 3000 },
   NODE_ENV:     { type: 'enum',    values: ['development', 'production', 'test'] as const, default: 'development' },
@@ -50,7 +50,7 @@ env.NODE_ENV      // "development" | "production" | "test"
 env.ENABLE_CACHE  // boolean
 ```
 
-Call `typedenv()` at the top of your entry file, before anything else runs.
+Call `enverify()` at the top of your entry file, before anything else runs.
 If validation fails, the process exits immediately with a clear message.
 
 ---
@@ -59,9 +59,9 @@ If validation fails, the process exits immediately with a clear message.
 
 ```ts
 import 'dotenv/config'       // load .env into process.env
-import { typedenv } from 'typedenv'  // then validate it
+import { enverify } from 'enverify'  // then validate it
 
-const env = typedenv({ ... })
+const env = enverify({ ... })
 ```
 
 ---
@@ -97,11 +97,11 @@ NODE_ENV: { type: 'enum', values: ['development', 'production', 'test'] as const
 
 ## Error Messages
 
-When validation fails, typedenv throws **before your app starts** and
+When validation fails, enverify throws **before your app starts** and
 shows every problem at once — not just the first one:
 
 ```
-✗ typedenv validation failed:
+✗ enverify validation failed:
 
   → DATABASE_URL: required but not set
   → PORT: expected a number, got "abc"
@@ -114,11 +114,11 @@ Fix the above environment variables before starting the app.
 
 ## Custom Source
 
-By default typedenv reads from `process.env`. Pass a custom source for
+By default enverify reads from `process.env`. Pass a custom source for
 testing or other use cases:
 
 ```ts
-const env = typedenv(schema, {
+const env = enverify(schema, {
   source: { PORT: '8080', NODE_ENV: 'test' }
 })
 ```
@@ -129,11 +129,11 @@ const env = typedenv(schema, {
 
 Zod is a great general-purpose validator, but using it for env vars requires
 wiring up `z.object()`, `.parse()`, and a custom coercion setup every time.
-typedenv is one focused tool that does exactly this job — no boilerplate,
+enverify is one focused tool that does exactly this job — no boilerplate,
 no extra concepts, just a schema and a typed result.
 
 ---
 
 ## License
 
-MIT — [aradhyacp](https://github.com/aradhyacp/typedenv)
+MIT — [aradhyacp](https://github.com/aradhyacp/enverify)
