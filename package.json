@@ -1,5 +1,26 @@
 {
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.15",
+    "@types/node": "^25.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.4",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "ultracite": "^7.7.0",
+    "vitest": "^4.1.4"
+  },
   "name": "ts-enverify",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build",
+    "check": "ultracite check",
+    "fix": "ultracite fix",
+    "prepare": "husky"
+  },
   "version": "1.1.2",
   "description": "Type-safe environment variable validation for Node.js. Zero dependencies.",
   "author": "aradhyacp",
@@ -26,14 +47,6 @@
     "README.md",
     "LICENSE"
   ],
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run build"
-  },
   "keywords": [
     "env",
     "environment",
@@ -54,10 +67,9 @@
     "zero-dependencies"
   ],
   "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^25.6.0",
-    "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
-    "vitest": "^4.1.4"
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,jsonc,css}": [
+      "npx ultracite fix"
+    ]
   }
 }
