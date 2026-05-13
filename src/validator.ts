@@ -73,7 +73,7 @@ export function enverify<S extends EnverifySchema>(
                     const parsedUrl = new URL(raw)
                     result[key] = parsedUrl.toString()
                 } catch (error) {
-                    failures.push(`${key}: expected an url, got "${raw}"`)
+                    failures.push(`${key}: expected a URL, got "${raw}"`)
                 }
                 break
             }
