@@ -39,8 +39,8 @@ npm i ts-enverify
 import { enverify } from 'ts-enverify'
 
 const env = enverify({
-  DATABASE_URL: { type: 'string',  required: true },
-  PORT:         { type: 'number',  default: 3000 },
+  DATABASE_URL: { type: 'url',     required: true, description: 'Postgres connection string' },
+  PORT:         { type: 'number',  default: 3000,  description: 'Server listening port' },
   NODE_ENV:     { type: 'enum',    values: ['development', 'production', 'test'] as const, default: 'development' },
   ENABLE_CACHE: { type: 'boolean', default: false },
 })
@@ -76,21 +76,35 @@ const env = enverify({ ... })
 | `number`  | `"3000"`, `"8.5"`           | `number`                             |
 | `boolean` | `"true"` `"false"` `"1"` `"0"` | `boolean`                        |
 | `enum`    | one of the declared values  | `"a" \| "b" \| "c"`                 |
-| `url`     | any valid URL string        | `string` (normalized URL)            |
+| `url`     | any valid URL string        | `string` (normalized via `URL`)      |
+
+URL values are parsed with `new URL(raw)` and returned as `toString()`,
+so `https://example.com` becomes `https://example.com/`.
 
 ---
 
 ## Field Options
 
+Each field supports the options below. `values` is required for `enum`.
+
+- `type`: one of `string`, `number`, `boolean`, `enum`, `url`
+- `required`: marks the field as required (no fallback unless `default` is set)
+- `default`: fallback value when the env var is missing
+- `description`: optional metadata for docs/tooltips (ignored by runtime)
+- `values`: list of allowed values for `enum` fields
+
 ```ts
 // required — must be set, no fallback
-DATABASE_URL: { type: 'string', required: true }
+DATABASE_URL: { type: 'url', required: true, description: 'The main database URL' }
 
 // default — optional, falls back to this value if not set
-PORT: { type: 'number', default: 3000 }
+PORT: { type: 'number', default: 3000, description: 'Port for the server to listen on' }
+
+// description — optional metadata for docs/tooltips (ignored by runtime)
+HOST: { type: 'string', description: 'Sets the default host' }
 
 // optional — not required, no default. Type will be string | undefined
-HOST: { type: 'string' }
+API_KEY: { type: 'string' }
 
 // enum — value must be one of the declared options
 NODE_ENV: { type: 'enum', values: ['development', 'production', 'test'] as const }
@@ -128,6 +142,9 @@ const env = enverify(schema, {
   source: { PORT: '8080', NODE_ENV: 'test' }
 })
 ```
+
+The `source` object should contain only string values (or `undefined`),
+matching the shape of `process.env`.
 
 ---
 
