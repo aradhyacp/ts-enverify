@@ -32,3 +32,6 @@ jobs:
 
       - name: Run Tests
         run: npm run test
+
+      - name: Ultracite Check
+        run: npm run check
