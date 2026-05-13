@@ -39,7 +39,9 @@ type InferFieldType<T extends FieldSchema> = T extends { type: "string" }
       ? boolean
       : T extends { type: "enum"; values: infer V extends readonly string[] }
         ? V[number]
-        : never;
+        : T extends { type: "url" }
+          ? string
+          : never;
 
 type InferField<T extends FieldSchema> = T extends { required: true }
   ? InferFieldType<T>

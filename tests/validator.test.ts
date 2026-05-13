@@ -122,61 +122,68 @@ describe("error collection", () => {
       expect(e.failures[0]).toContain("DATABASE_URL");
       expect(e.failures[1]).toContain("PORT");
     }
-  })
-})
+  });
+});
 
-describe('url fields', () => {
-  it('parses valid http url', () => {
+describe("url fields", () => {
+  it("parses valid http url", () => {
     const env = enverify(
-      { DATABASE_URL: { type: 'url', required: true } },
-      { source: { DATABASE_URL: 'http://localhost:5432/db' } }
-    )
+      { DATABASE_URL: { type: "url", required: true } },
+      { source: { DATABASE_URL: "http://localhost:5432/db" } }
+    );
 
-    expect(env.DATABASE_URL).toBe('http://localhost:5432/db')
-  })
+    expect(env.DATABASE_URL).toBe("http://localhost:5432/db");
+  });
 
-  it('parses valid https url', () => {
+  it("parses valid https url", () => {
     const env = enverify(
-      { API_URL: { type: 'url' } },
-      { source: { API_URL: 'https://example.com' } }
-    )
+      { API_URL: { type: "url" } },
+      { source: { API_URL: "https://example.com" } }
+    );
 
-    expect(env.API_URL).toBe('https://example.com/')
-  })
+    expect(env.API_URL).toBe("https://example.com/");
+  });
 
-  it('throws for invalid url', () => {
+  it("throws for invalid url", () => {
     expect(() =>
       enverify(
-        { DATABASE_URL: { type: 'url', required: true } },
-        { source: { DATABASE_URL: 'not-a-url' } }
+        { DATABASE_URL: { type: "url", required: true } },
+        { source: { DATABASE_URL: "not-a-url" } }
       )
-    ).toThrow(EnverifyError)
-  })
+    ).toThrow(EnverifyError);
+  });
 
-  it('throws when required url is missing', () => {
+  it("throws when required url is missing", () => {
     expect(() =>
       enverify(
-        { DATABASE_URL: { type: 'url', required: true } },
+        { DATABASE_URL: { type: "url", required: true } },
         { source: {} }
       )
-    ).toThrow(EnverifyError)
-  })
+    ).toThrow(EnverifyError);
+  });
 
-  it('ftp protocol as url', ()=>{
+  it("ftp protocol as url", () => {
     const env = enverify(
-      {FTP_URL: { type: 'url' }},
-      { source: { FTP_URL: 'ftp://example.com' } }
-    )
+      { FTP_URL: { type: "url" } },
+      { source: { FTP_URL: "ftp://example.com" } }
+    );
 
-    expect(env.FTP_URL).toBe('ftp://example.com/')
-  })
+    expect(env.FTP_URL).toBe("ftp://example.com/");
+  });
 
-  it('DB uri as url', ()=>{
+  it("DB uri as url", () => {
     const env = enverify(
-      {DB_URI: {type: 'url'}},
-      {source: {DB_URI: 'postgresql://postgres:PASSWORD@db.PROJECT.supabase.co:5432/postgres/'}}
-    )
+      { DB_URI: { type: "url" } },
+      {
+        source: {
+          DB_URI:
+            "postgresql://postgres:PASSWORD@db.PROJECT.supabase.co:5432/postgres/",
+        },
+      }
+    );
 
-    expect(env.DB_URI).toBe('postgresql://postgres:PASSWORD@db.PROJECT.supabase.co:5432/postgres/')
-  })
-})
+    expect(env.DB_URI).toBe(
+      "postgresql://postgres:PASSWORD@db.PROJECT.supabase.co:5432/postgres/"
+    );
+  });
+});
