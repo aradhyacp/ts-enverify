@@ -41,6 +41,7 @@ When proposing a change, prefer solutions that preserve these goals.
 - Language: TypeScript
 - Test runner: Vitest
 - Build tool: tsup
+- Code quality: Ultracite
 - Output: CJS + ESM + type declarations
 
 ## Getting Started
@@ -63,6 +64,8 @@ npm install
 ```bash
 npm run build       # build dist artifacts with tsup
 npm run typecheck   # run TypeScript checks without emitting files
+npm run check       # run Ultracite checks
+npm run fix         # auto-fix issues with Ultracite
 npm test            # run tests once
 npm run test:watch  # run tests in watch mode
 npm run dev         # tsup watch build
@@ -97,6 +100,7 @@ Guideline:
 ```bash
 npm run typecheck
 npm test
+npm run check
 npm run build
 ```
 
