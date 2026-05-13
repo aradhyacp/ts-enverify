@@ -76,6 +76,7 @@ const env = enverify({ ... })
 | `number`  | `"3000"`, `"8.5"`           | `number`                             |
 | `boolean` | `"true"` `"false"` `"1"` `"0"` | `boolean`                        |
 | `enum`    | one of the declared values  | `"a" \| "b" \| "c"`                 |
+| `url`     | any valid URL string        | `string` (normalized URL)            |
 
 ---
 
@@ -93,6 +94,9 @@ HOST: { type: 'string' }
 
 // enum — value must be one of the declared options
 NODE_ENV: { type: 'enum', values: ['development', 'production', 'test'] as const }
+
+// url — value must be a valid URL and is returned normalized
+API_BASE_URL: { type: 'url', required: true }
 ```
 
 ---
