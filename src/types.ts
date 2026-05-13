@@ -8,7 +8,7 @@ export type StringField = {
 export type NumberField = {
     type: 'number'
     required?: true
-    default?: string
+    default?: number
     description?: string
 }
 
@@ -27,7 +27,14 @@ export type EnumField = {
     description?: string
 }
 
-export type FieldSchema = StringField | NumberField | BooleanField | EnumField
+export type UrlField = {
+    type: 'url'
+    required?: true
+    default?: string
+    description?: string
+}
+
+export type FieldSchema = StringField | NumberField | BooleanField | EnumField | UrlField
 
 export type EnverifySchema = Record<string, FieldSchema>
 
@@ -35,7 +42,8 @@ type InferFieldType<T extends FieldSchema> =
 T extends {type:'string'} ? string :
 T extends {type:'number'}? number :
 T extends {type:'boolean'} ? boolean :
-T extends {type:'enum';values: infer V extends readonly string[]}? V[number] : never
+T extends {type:'enum';values: infer V extends readonly string[]}? V[number] : 
+T extends {type:'url'} ? string : never
 
 type InferField<T extends FieldSchema> = 
 T extends {required:true}? InferFieldType<T> :
