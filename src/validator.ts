@@ -57,26 +57,23 @@ export function enverify<S extends EnverifySchema>(
         break;
       }
 
-            case 'enum': {
-                if(field.values.includes(raw)){
-                    result[key] = raw
-                } else {
-                    failures.push(
-            `${key}: expected one of [${field.values.join(', ')}], got "${raw}"`
-          )
-                }
-                break
-            }
+      case "enum": {
+        if (field.values.includes(raw)) {
+          result[key] = raw;
+        } else {
+          failures.push(
+            `${key}: expected one of [${field.values.join(", ")}], got "${raw}"`
+          );
+        }
+        break;
+      }
 
-            case 'url': {
-                try {
-                    const parsedUrl = new URL(raw)
-                    result[key] = parsedUrl.toString()
-                } catch (error) {
-                    failures.push(`${key}: expected a URL, got "${raw}"`)
-                }
-                break
-            }
+      case "url": {
+        try {
+          const parsedUrl = new URL(raw);
+          result[key] = parsedUrl.toString();
+        } catch {
+          failures.push(`${key}: expected a URL, got "${raw}"`);
         }
         break;
       }
