@@ -35,3 +35,6 @@ jobs:
 
       - name: Ultracite Check
         run: npm run check
+
+      - name: Build the package
+        run: npm run build
