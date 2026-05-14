@@ -27,7 +27,19 @@ export type EnumField = {
   description?: string;
 };
 
-export type FieldSchema = StringField | NumberField | BooleanField | EnumField;
+export type UrlField = {
+  type: "url";
+  required?: true;
+  default?: string;
+  description?: string;
+};
+
+export type FieldSchema =
+  | StringField
+  | NumberField
+  | BooleanField
+  | EnumField
+  | UrlField;
 
 export type EnverifySchema = Record<string, FieldSchema>;
 
