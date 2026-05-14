@@ -79,9 +79,7 @@ export function enverify<S extends EnverifySchema>(
       }
 
       default: {
-        throw new Error(
-          `Unhandled field type for schema key "${key}": "${String(field.type)}"`
-        );
+        throw new Error(`Unhandled field type for schema key "${key}"`);
       }
     }
   }
