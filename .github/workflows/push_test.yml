@@ -1,0 +1,36 @@
+name: CI
+
+on:
+    push:
+      branches:
+        - main
+
+permissions:
+    contents: read
+
+jobs:
+  test:
+    name: On push test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Deps
+        run: npm install
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Ultracite check
+        run: npm run check
+    
+      - name: Build the package
+        run: npm run build
