@@ -34,12 +34,20 @@ export type UrlField = {
   description?: string;
 };
 
+export type PortField = {
+  type: "port";
+  required?: true;
+  default?: number;
+  description?: string;
+};
+
 export type FieldSchema =
   | StringField
   | NumberField
   | BooleanField
   | EnumField
-  | UrlField;
+  | UrlField
+  | PortField;
 
 export type EnverifySchema = Record<string, FieldSchema>;
 
@@ -53,7 +61,9 @@ type InferFieldType<T extends FieldSchema> = T extends { type: "string" }
         ? V[number]
         : T extends { type: "url" }
           ? string
-          : never;
+          : T extends { type: "port" }
+            ? number
+            : never;
 
 type InferField<T extends FieldSchema> = T extends { required: true }
   ? InferFieldType<T>
