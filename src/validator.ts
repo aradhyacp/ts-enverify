@@ -78,6 +78,22 @@ export function enverify<S extends EnverifySchema>(
         break;
       }
 
+      case "port": {
+        const parsed = Number(raw);
+        if (Number.isNaN(parsed)) {
+          failures.push(`${key}: expected a port number, got "${raw}"`);
+        } else if (!Number.isInteger(parsed)) {
+          failures.push(`${key}: port must be an integer, got ${parsed}`);
+        } else if (parsed < 1 || parsed > 65_535) {
+          failures.push(
+            `${key}: port must be between 1 and 65535, got ${parsed}`
+          );
+        } else {
+          result[key] = parsed;
+        }
+        break;
+      }
+
       default: {
         throw new Error(`Unhandled field type for schema key "${key}"`);
       }

@@ -187,3 +187,56 @@ describe("url fields", () => {
     );
   });
 });
+
+describe("port fields", () => {
+  it("parses a valid port number", () => {
+    const env = enverify(
+      { PORT: { type: "port", default: 3000 } },
+      { source: { PORT: "8080" } }
+    );
+    expect(env.PORT).toBe(8080);
+    expect(typeof env.PORT).toBe("number");
+  });
+
+  it("uses default port when absent", () => {
+    const env = enverify(
+      { PORT: { type: "port", default: 3000 } },
+      { source: {} }
+    );
+    expect(env.PORT).toBe(3000);
+  });
+
+  it.each([
+    ["0", "must be between 1 and 65535"],
+    ["70000", "must be between 1 and 65535"],
+    ["3.14", "must be an integer"],
+    ["abc", "expected a port number"],
+  ])("throws for invalid port %s", (raw, _expectedError) => {
+    expect(() =>
+      enverify(
+        { PORT: { type: "port", required: true } },
+        { source: { PORT: raw } }
+      )
+    ).toThrow(EnverifyError);
+  });
+
+  it("accepts boundary values", () => {
+    const env1 = enverify(
+      { PORT: { type: "port" } },
+      { source: { PORT: "1" } }
+    );
+    expect(env1.PORT).toBe(1);
+
+    const env2 = enverify(
+      { PORT: { type: "port" } },
+      { source: { PORT: "65535" } }
+    );
+    expect(env2.PORT).toBe(65_535);
+  });
+
+  it("throws when required port is missing", () => {
+    expect(() =>
+      enverify({ PORT: { type: "port", required: true } }, { source: {} })
+    ).toThrow(EnverifyError);
+  });
+});
