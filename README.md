@@ -39,19 +39,36 @@ npm i ts-enverify
 import { enverify } from 'ts-enverify'
 
 const env = enverify({
-  DATABASE_URL: { type: 'url',     required: true, description: 'Postgres connection string' },
-  PORT:         { type: 'number',  default: 3000,  description: 'Server listening port' },
-  NODE_ENV:     { type: 'enum',    values: ['development', 'production', 'test'] as const, default: 'development' },
+  APP_NAME:     { type: 'string', required: true },
+  MAX_RETRIES:  { type: 'number', default: 3 },
+  PORT:         { type: 'port', default: 3000 },
   ENABLE_CACHE: { type: 'boolean', default: false },
+  NODE_ENV:     { type: 'enum', values: ['development', 'production', 'test'] as const },
+  API_BASE_URL: { type: 'url', required: true },
 })
 
-// Fully typed — no casting needed
-env.DATABASE_URL  // string
-env.PORT          // number  (not "string"!)
-env.NODE_ENV      // "development" | "production" | "test"
-env.ENABLE_CACHE  // boolean
 ```
+Resulting types:
 
+| Property | Type |
+| --- | --- |
+| `env.APP_NAME` | `string` |
+| `env.MAX_RETRIES` | `number` |
+| `env.PORT` | `number` |
+| `env.ENABLE_CACHE` | `boolean` |
+| `env.NODE_ENV` | `"development" "production"  "test"` |
+| `env.API_BASE_URL` | `string` |
+
+Example env values:
+
+```text
+APP_NAME="my-service"
+MAX_RETRIES="5"
+PORT="8080"
+ENABLE_CACHE="true"
+NODE_ENV="production"
+API_BASE_URL="https://api.example.com"
+```
 Call `enverify()` at the top of your entry file, before anything else runs.
 If validation fails, the process exits immediately with a clear message.
 
@@ -74,6 +91,7 @@ const env = enverify({ ... })
 |-----------|-----------------------------|--------------------------------------|
 | `string`  | any string                  | `string`                             |
 | `number`  | `"3000"`, `"8.5"`           | `number`                             |
+| `port`    | `"1"` to `"65535"` (integers only) | `number`                     |
 | `boolean` | `"true"` `"false"` `"1"` `"0"` | `boolean`                        |
 | `enum`    | one of the declared values  | `"a" \| "b" \| "c"`                 |
 | `url`     | any valid URL string        | `string` (normalized via `URL`)      |
@@ -87,7 +105,7 @@ so `https://example.com` becomes `https://example.com/`.
 
 Each field supports the options below. `values` is required for `enum`.
 
-- `type`: one of `string`, `number`, `boolean`, `enum`, `url`
+- `type`: one of `string`, `number`, `port`, `boolean`, `enum`, `url`
 - `required`: marks the field as required (no fallback unless `default` is set)
 - `default`: fallback value when the env var is missing
 - `description`: optional metadata for docs/tooltips (ignored by runtime)
@@ -98,7 +116,7 @@ Each field supports the options below. `values` is required for `enum`.
 DATABASE_URL: { type: 'url', required: true, description: 'The main database URL' }
 
 // default — optional, falls back to this value if not set
-PORT: { type: 'number', default: 3000, description: 'Port for the server to listen on' }
+PORT: { type: 'port', default: 3000, description: 'Port for the server to listen on' }
 
 // description — optional metadata for docs/tooltips (ignored by runtime)
 HOST: { type: 'string', description: 'Sets the default host' }
@@ -124,7 +142,7 @@ shows every problem at once — not just the first one:
 ✗ ts-enverify validation failed:
 
   → DATABASE_URL: required but not set
-  → PORT: expected a number, got "abc"
+  → PORT: expected a port number, got "abc"
   → NODE_ENV: expected one of [development, production, test], got "prod"
 
 Fix the above environment variables before starting the app.
