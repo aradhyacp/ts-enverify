@@ -9,6 +9,9 @@ Zero dependencies. Works with any framework. Infers TypeScript types automatical
 
 [![npm version](https://img.shields.io/npm/v/ts-enverify.svg)](https://www.npmjs.com/package/ts-enverify)
 [![license](https://img.shields.io/npm/l/ts-enverify.svg)](./LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?&logo=typescript)](https://www.typescriptlang.org/)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/aradhyacp/ts-enverify/push_test.yml)](https://github.com/aradhyacp/ts-enverify/actions)
+[![Zero Dependencies](https://img.shields.io/badge/dependencies-0-success)](https://www.npmjs.com/package/ts-enverify)
 
 ---
 
